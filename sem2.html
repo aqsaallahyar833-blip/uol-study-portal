@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester 2 - UOL Study Portal</title>
+    <style>
+        :root {
+            --primary-green: #0B6B3A;
+            --secondary-green: #1FA463;
+            --dark-green: #08512C;
+            --light-bg: #f9f9f9;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --black: #111111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: linear-gradient(90deg, var(--primary-green), var(--secondary-green));
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav ul li {
+            margin: 0 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-left-color: var(--secondary-green);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .subject-header h2 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
+            border-radius: 8px;
+        }
+
+        .topic-item h4 {
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .topic-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover .pdf-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pdf-btn {
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-pdf {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .view-pdf:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .download-pdf {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .download-pdf:hover {
+            background: #388e3c;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="semesters.html">Semesters</a></li>
+            <li><a href="topics.html">Topics</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Semester 2</h1>
+            <p>Core Building - Object Oriented & Discrete Concepts</p>
+        </div>
+
+        <div class="subjects-grid">
+            <!-- OOP -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Object Oriented Programming</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Classes & Objects</h4>
+                            <p>Defining classes, creating objects, constructors and destructors. Member functions and
+                                data members access specifiers.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/oop-classes-objects.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/oop-classes-objects.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Encapsulation</h4>
+                            <p>Private, public, protected access modifiers. Getters and setters. Data hiding and
+                                abstraction principles.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/oop-encapsulation.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/oop-encapsulation.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Inheritance</h4>
+                            <p>Single, multiple, multilevel, hierarchical inheritance. Virtual base classes,
+                                constructor/destructor in inheritance.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/oop-inheritance.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/oop-inheritance.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Polymorphism</h4>
+                            <p>Function overloading, operator overloading. Runtime polymorphism using virtual functions
+                                and abstract classes.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/oop-polymorphism.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/oop-polymorphism.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Templates & STL</h4>
+                            <p>Function templates, class templates. Introduction to STL: vectors, lists, maps,
+                                iterators.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/oop-templates-stl.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/oop-templates-stl.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Discrete Math -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Discrete Mathematics</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Mathematical Logic</h4>
+                            <p>Propositional logic, truth tables, tautologies, contradictions. Logical equivalences and
+                                inference rules.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/discrete-logic.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/discrete-logic.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Set Theory</h4>
+                            <p>Sets, subsets, power sets. Set operations: union, intersection, complement. Venn diagrams
+                                applications.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/discrete-sets.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/discrete-sets.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Relations & Functions</h4>
+                            <p>Types of relations: reflexive, symmetric, transitive. Equivalence relations. One-to-one
+                                and onto functions.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/discrete-relations.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/discrete-relations.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Graph Theory</h4>
+                            <p>Graphs, digraphs, adjacency matrices. Euler and Hamiltonian paths. Trees and spanning
+                                trees (BFS/DFS).</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/discrete-graphs.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/discrete-graphs.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Combinatorics</h4>
+                            <p>Permutations, combinations, pigeonhole principle. Inclusion-exclusion principle and
+                                recurrence relations.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/discrete-combinatorics.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem2/discrete-combinatorics.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Digital Logic -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Digital Logic Design</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Boolean Algebra</h4>
+                            <p>Boolean laws, De Morgan's theorems. Simplification using algebraic methods and Karnaugh
+                                maps.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/digital-boolean.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/digital-boolean.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Logic Gates</h4>
+                            <p>AND, OR, NOT, NAND, NOR, XOR, XNOR gates. Universal gates and implementation of circuits.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/digital-gates.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/digital-gates.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Combinational Circuits</h4>
+                            <p>Half/Full adders, subtractors, multiplexers, demultiplexers. Encoders, decoders, and
+                                comparators.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/digital-combinational.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem2/digital-combinational.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Sequential Circuits</h4>
+                            <p>Flip-flops: SR, JK, D, T. Registers and counters. State diagrams and state tables.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/digital-sequential.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/digital-sequential.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Memory & PLDs</h4>
+                            <p>ROM, RAM, cache memory basics. Programmable logic devices: PAL, PLA, FPGA concepts.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/digital-memory.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/digital-memory.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Communication -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Communication Skills</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Verbal Communication</h4>
+                            <p>Effective speaking, pronunciation, articulation. Telephone etiquette and formal
+                                conversations.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/communication-verbal.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/communication-verbal.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Non-verbal Communication</h4>
+                            <p>Body language, facial expressions, gestures. Eye contact, posture, and spatial distance.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/communication-nonverbal.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem2/communication-nonverbal.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Business Communication</h4>
+                            <p>Writing business letters, emails, and proposals. Meeting protocols and minutes
+                                preparation.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/communication-business.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem2/communication-business.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Report Writing</h4>
+                            <p>Structure of reports, formal and informal reports. Data presentation and conclusion
+                                writing.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/communication-reports.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem2/communication-reports.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Probability & Statistics</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Basic Probability</h4>
+                            <p>Sample space, events, probability rules. Conditional probability and Bayes' theorem.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/stats-probability.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/stats-probability.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Random Variables</h4>
+                            <p>Discrete and continuous variables. Probability distributions: Binomial, Poisson, Normal.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/stats-variables.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem2/stats-variables.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Hypothesis Testing</h4>
+                            <p>Null and alternative hypotheses. Type I and Type II errors. Z-tests and T-tests basics.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/stats-hypothesis.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/stats-hypothesis.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Regression Analysis</h4>
+                            <p>Linear regression, correlation coefficient. Least squares method and prediction.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem2/stats-regression.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem2/stats-regression.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="semesters.html" class="back-btn">← Back to Semesters</a>
+        </div>
+    </div>
+</body>
+
+</html>

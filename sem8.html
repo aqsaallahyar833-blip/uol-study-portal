@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester 8 - UOL Study Portal</title>
+    <style>
+        :root {
+            --primary-green: #0B6B3A;
+            --secondary-green: #1FA463;
+            --dark-green: #08512C;
+            --light-bg: #f9f9f9;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --black: #111111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav ul li {
+            margin: 0 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-left-color: var(--secondary-green);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .subject-header h2 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
+            border-radius: 8px;
+        }
+
+        .topic-item h4 {
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .topic-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover .pdf-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pdf-btn {
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-pdf {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .view-pdf:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .download-pdf {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .download-pdf:hover {
+            background: #388e3c;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="semesters.html">Semesters</a></li>
+            <li><a href="topics.html">Topics</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Semester 8</h1>
+            <p>Completion - Project Defense & Emerging Technologies</p>
+        </div>
+
+        <div class="subjects-grid">
+            <!-- FYP II -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Final Year Project II</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Implementation</h4>
+                            <p>Coding standards, modular development. Unit testing, integration testing, bug fixing
+                                strategies.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/fyp2-implementation.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem8/fyp2-implementation.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>System Testing</h4>
+                            <p>Functional testing, performance testing, security testing. User acceptance testing
+                                procedures.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/fyp2-testing.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/fyp2-testing.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Deployment</h4>
+                            <p>Production environment setup, CI/CD pipeline. Database migration, server configuration.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/fyp2-deployment.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/fyp2-deployment.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Thesis Writing</h4>
+                            <p>Complete documentation: introduction to conclusion. Results analysis, future work,
+                                references.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/fyp2-thesis.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/fyp2-thesis.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Project Defense</h4>
+                            <p>Presentation skills, demo preparation. Q&A handling, technical justification of design
+                                choices.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/fyp2-defense.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/fyp2-defense.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Entrepreneurship -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Entrepreneurship</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Business Planning</h4>
+                            <p>Business model canvas, value proposition. Market research, competitive analysis, SWOT.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/ent-business-planning.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem8/ent-business-planning.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Startup Management</h4>
+                            <p>Lean startup methodology, MVP concept. Funding options: bootstrapping, VC, angel
+                                investors.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/ent-startup.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/ent-startup.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Marketing & Sales</h4>
+                            <p>Digital marketing, SEO, content marketing. Customer acquisition, retention strategies.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/ent-marketing.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/ent-marketing.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Finance Basics</h4>
+                            <p>Cash flow, break-even analysis, financial projections. Balance sheets, income statements.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/ent-finance.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/ent-finance.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Intellectual Property</h4>
+                            <p>Patents, copyrights, trademarks. Licensing, NDAs, protecting software innovations.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/ent-ip.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem8/ent-ip.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Big Data -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Big Data Analytics</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Hadoop Ecosystem</h4>
+                            <p>HDFS, MapReduce, YARN architecture. Hive, Pig, HBase for data processing and storage.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/bd-hadoop.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/bd-hadoop.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Apache Spark</h4>
+                            <p>RDDs, DataFrames, Datasets. Spark SQL, Spark Streaming, MLlib overview.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/bd-spark.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/bd-spark.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Real-time Processing</h4>
+                            <p>Apache Kafka, Flink, Storm. Stream processing vs batch processing use cases.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/bd-realtime.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/bd-realtime.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Data Lakes</h4>
+                            <p>Architecture, data ingestion, ETL/ELT. AWS S3, Azure Data Lake, Delta Lake.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/bd-datalakes.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/bd-datalakes.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Analytics Applications</h4>
+                            <p>Recommendation systems, fraud detection. Social media analytics, sentiment analysis.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/bd-applications.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/bd-applications.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- IoT -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Internet of Things</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>IoT Architecture</h4>
+                            <p>Perception, network, application layers. Sensors, actuators, microcontrollers overview.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/iot-architecture.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem8/iot-architecture.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Communication Protocols</h4>
+                            <p>MQTT, CoAP, HTTP/2, WebSockets. Bluetooth Low Energy, Zigbee, LoRaWAN, NFC.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/iot-protocols.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/iot-protocols.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Embedded Systems</h4>
+                            <p>Arduino, Raspberry Pi programming. GPIO interfacing, sensor integration basics.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/iot-embedded.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/iot-embedded.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>IoT Platforms</h4>
+                            <p>AWS IoT, Azure IoT Hub, Google Cloud IoT. Device management, data visualization
+                                dashboards.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/iot-platforms.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/iot-platforms.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Smart Applications</h4>
+                            <p>Smart homes, smart cities, industrial IoT. Healthcare monitoring, agriculture automation.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/iot-applications.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem8/iot-applications.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Elective II -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Elective II - Blockchain</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Distributed Ledger</h4>
+                            <p>Blockchain structure, blocks, hashes, merkle trees. Public vs private blockchains.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/elective-ledger.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/elective-ledger.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Consensus Mechanisms</h4>
+                            <p>Proof of Work, Proof of Stake, Practical Byzantine Fault Tolerance. Mining and
+                                validators.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/elective-consensus.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem8/elective-consensus.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Smart Contracts</h4>
+                            <p>Ethereum platform, Solidity basics. DApps architecture, gas fees, contract deployment.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/elective-contracts.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem8/elective-contracts.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Cryptocurrency</h4>
+                            <p>Bitcoin architecture, transactions, wallets. Altcoins, stablecoins, central bank digital
+                                currencies.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/elective-crypto.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem8/elective-crypto.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Blockchain Applications</h4>
+                            <p>Supply chain, healthcare records, voting systems. DeFi, NFTs, enterprise blockchain
+                                (Hyperledger).</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem8/elective-applications.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem8/elective-applications.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="semesters.html" class="back-btn">← Back to Semesters</a>
+        </div>
+    </div>
+</body>
+
+</html>

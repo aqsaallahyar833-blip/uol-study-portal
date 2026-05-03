@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester 6 - UOL Study Portal</title>
+    <style>
+        :root {
+            --primary-green: #0B6B3A;
+            --secondary-green: #1FA463;
+            --dark-green: #08512C;
+            --light-bg: #f9f9f9;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --black: #111111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav ul li {
+            margin: 0 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-left-color: var(--secondary-green);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .subject-header h2 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
+            border-radius: 8px;
+        }
+
+        .topic-item h4 {
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .topic-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover .pdf-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pdf-btn {
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-pdf {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .view-pdf:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .download-pdf {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .download-pdf:hover {
+            background: #388e3c;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="semesters.html">Semesters</a></li>
+            <li><a href="topics.html">Topics</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Semester 6</h1>
+            <p>Specialization - AI, Mobile & Cloud</p>
+        </div>
+
+        <div class="subjects-grid">
+            <!-- AI -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Artificial Intelligence</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Search Algorithms</h4>
+                            <p>Uninformed search: BFS, DFS, UCS, IDS. Informed search: greedy best-first, A* algorithm,
+                                heuristic design.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ai-search.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/ai-search.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Knowledge Representation</h4>
+                            <p>Propositional and first-order logic. Forward and backward chaining, resolution
+                                refutation.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ai-knowledge.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/ai-knowledge.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Machine Learning Basics</h4>
+                            <p>Supervised vs unsupervised learning. Linear regression, decision trees, KNN, k-means
+                                clustering.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ai-ml-basics.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/ai-ml-basics.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Neural Networks</h4>
+                            <p>Perceptron, multilayer perceptron, backpropagation. Activation functions, gradient
+                                descent.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ai-neural.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/ai-neural.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>NLP & Expert Systems</h4>
+                            <p>Text processing, tokenization, parsing. Rule-based expert systems, uncertainty handling.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ai-nlp.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem6/ai-nlp.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Mobile Development -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Mobile App Development</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Android Fundamentals</h4>
+                            <p>Activities, intents, services, broadcast receivers. Activity lifecycle, manifest file
+                                structure.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/mobile-android-basics.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem6/mobile-android-basics.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>UI Components</h4>
+                            <p>Layouts: linear, relative, constraint. RecyclerView, fragments, navigation drawer,
+                                material design.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/mobile-ui.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/mobile-ui.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Data Storage</h4>
+                            <p>Shared preferences, SQLite, Room database. File storage, content providers.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/mobile-storage.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/mobile-storage.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>APIs & Backend</h4>
+                            <p>Retrofit/Volley for REST APIs. JSON parsing, image loading libraries. Firebase
+                                integration.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/mobile-apis.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/mobile-apis.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>App Publishing</h4>
+                            <p>App signing, Play Store guidelines. App bundles, version management, release management.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/mobile-publishing.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/mobile-publishing.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cloud Computing -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Cloud Computing</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Virtualization</h4>
+                            <p>Hypervisors Type 1 & 2. Virtual machines vs containers. Docker basics and images.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/cloud-virtualization.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/cloud-virtualization.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Cloud Service Models</h4>
+                            <p>IaaS, PaaS, SaaS with examples. Public, private, hybrid, community cloud deployment
+                                models.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/cloud-service-models.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/cloud-service-models.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>AWS/Azure Basics</h4>
+                            <p>EC2, S3, RDS, Lambda overview. Auto-scaling, load balancing, cloud monitoring.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/cloud-aws.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/cloud-aws.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Serverless & Microservices</h4>
+                            <p>Function-as-a-Service, API Gateway. Microservices architecture, service discovery.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/cloud-serverless.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/cloud-serverless.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Cloud Security</h4>
+                            <p>Shared responsibility model, encryption at rest/in transit. Identity and access
+                                management.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/cloud-security.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/cloud-security.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Data Science -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Data Science</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Data Preprocessing</h4>
+                            <p>Data cleaning, handling missing values, outliers. Normalization, standardization,
+                                encoding.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ds-preprocessing.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/ds-preprocessing.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Data Visualization</h4>
+                            <p>Matplotlib, Seaborn, Plotly basics. Charts: bar, line, scatter, heatmap, histogram.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ds-visualization.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/ds-visualization.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Statistical Analysis</h4>
+                            <p>Descriptive statistics, correlation, covariance. Hypothesis testing, confidence
+                                intervals.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ds-statistics.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/ds-statistics.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Python for Data Science</h4>
+                            <p>NumPy, Pandas, Scikit-learn basics. Data frames, series, data manipulation.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ds-python.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/ds-python.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Big Data Intro</h4>
+                            <p>5 V's of big data, Hadoop ecosystem. MapReduce concept, Spark introduction.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/ds-bigdata.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/ds-bigdata.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Technical Writing -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Technical Writing</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Documentation Types</h4>
+                            <p>User manuals, API docs, README files. White papers and case studies structure.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/writing-docs.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/writing-docs.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Research Papers</h4>
+                            <p>IMRAD format, literature review, methodology. Citation styles: APA, IEEE, MLA.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/writing-research.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/writing-research.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Proposals & Reports</h4>
+                            <p>Project proposals, feasibility reports. Progress reports, technical specifications.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/writing-proposals.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem6/writing-proposals.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Writing Tools</h4>
+                            <p>LaTeX basics, Markdown, Doxygen. Diagrams and visual aids in documentation.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem6/writing-tools.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem6/writing-tools.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="semesters.html" class="back-btn">← Back to Semesters</a>
+        </div>
+    </div>
+</body>
+
+</html>

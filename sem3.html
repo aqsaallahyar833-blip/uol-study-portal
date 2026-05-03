@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester 3 - UOL Study Portal</title>
+    <style>
+        :root {
+            --primary-green: #0B6B3A;
+            --secondary-green: #1FA463;
+            --dark-green: #08512C;
+            --light-bg: #f9f9f9;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --black: #111111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav ul li {
+            margin: 0 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-left-color: var(--secondary-green);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .subject-header h2 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
+            border-radius: 8px;
+        }
+
+        .topic-item h4 {
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .topic-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover .pdf-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pdf-btn {
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-pdf {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .view-pdf:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .download-pdf {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .download-pdf:hover {
+            background: #388e3c;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="semesters.html">Semesters</a></li>
+            <li><a href="topics.html">Topics</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Semester 3</h1>
+            <p>Technical Core - Data Structures & Architecture</p>
+        </div>
+
+        <div class="subjects-grid">
+            <!-- Data Structures -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Data Structures</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Arrays & Linked Lists</h4>
+                            <p>1D/2D arrays, dynamic arrays. Singly, doubly, circular linked lists. Operations:
+                                insertion, deletion, traversal.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/ds-arrays-lists.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/ds-arrays-lists.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Stacks & Queues</h4>
+                            <p>Stack ADT, array and linked list implementation. Queue, circular queue, dequeue, priority
+                                queue applications.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/ds-stacks-queues.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem3/ds-stacks-queues.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Trees</h4>
+                            <p>Binary trees, BST, AVL trees. Tree traversals: inorder, preorder, postorder. B-trees
+                                introduction.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/ds-trees.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/ds-trees.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Graphs</h4>
+                            <p>Adjacency matrix and list representations. BFS, DFS algorithms. Shortest path: Dijkstra's
+                                algorithm.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/ds-graphs.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/ds-graphs.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Hashing</h4>
+                            <p>Hash functions, collision resolution: chaining and open addressing. Load factor and
+                                rehashing.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/ds-hashing.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/ds-hashing.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Sorting & Searching</h4>
+                            <p>Bubble, selection, insertion, merge, quick sort. Linear and binary search. Complexity
+                                analysis.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/ds-sorting-searching.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem3/ds-sorting-searching.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Computer Organization -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Computer Organization & Architecture</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>CPU Design</h4>
+                            <p>Register organization, instruction formats. ALU design, control unit: hardwired and
+                                microprogrammed.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/coa-cpu.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem3/coa-cpu.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Instruction Cycle</h4>
+                            <p>Fetch, decode, execute cycles. Instruction pipelining: stages, hazards, and solutions.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/coa-instruction-cycle.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem3/coa-instruction-cycle.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Memory Hierarchy</h4>
+                            <p>Cache memory: mapping techniques, replacement policies. Virtual memory, paging, and
+                                segmentation.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/coa-memory.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/coa-memory.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>I/O Organization</h4>
+                            <p>I/O techniques: programmed, interrupt-driven, DMA. I/O processors and bus architecture.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/coa-io.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem3/coa-io.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>RISC vs CISC</h4>
+                            <p>Characteristics comparison, advantages and disadvantages. Pipelining in RISC processors.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/coa-risc-cisc.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/coa-risc-cisc.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Linear Algebra -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Linear Algebra</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Matrices</h4>
+                            <p>Matrix operations, transpose, inverse. Rank of matrix, echelon forms. Solving linear
+                                systems using matrices.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/linalg-matrices.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/linalg-matrices.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Determinants</h4>
+                            <p>Properties of determinants, cofactor expansion. Cramer's rule and applications.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/linalg-determinants.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem3/linalg-determinants.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Eigenvalues & Eigenvectors</h4>
+                            <p>Characteristic equation, finding eigenvalues. Diagonalization and applications in CS.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/linalg-eigenvalues.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem3/linalg-eigenvalues.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Vector Spaces</h4>
+                            <p>Subspaces, basis, dimension. Linear transformations and matrix representation.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/linalg-vector-spaces.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem3/linalg-vector-spaces.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Web Engineering -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Web Engineering</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>HTML5</h4>
+                            <p>Semantic elements, forms, tables, multimedia. Structure and best practices for clean
+                                markup.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/web-html5.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/web-html5.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>CSS3</h4>
+                            <p>Selectors, box model, flexbox, grid. Animations, transitions, responsive design with
+                                media queries.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/web-css3.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/web-css3.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>JavaScript Basics</h4>
+                            <p>Variables, data types, functions, events. DOM manipulation and form validation.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/web-javascript.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/web-javascript.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Responsive Design</h4>
+                            <p>Mobile-first approach, viewport settings. Frameworks introduction: Bootstrap basics.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/web-responsive.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/web-responsive.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Software Engineering -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Software Engineering</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>SDLC Models</h4>
+                            <p>Waterfall, iterative, spiral, V-model. Agile methodology: Scrum and Kanban basics.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/se-sdlc.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem3/se-sdlc.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Requirements Engineering</h4>
+                            <p>Functional and non-functional requirements. SRS document, use case diagrams.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/se-requirements.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/se-requirements.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Design Concepts</h4>
+                            <p>Modular design, cohesion, coupling. Architectural patterns: MVC, layered architecture.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/se-design.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/se-design.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Testing Fundamentals</h4>
+                            <p>Unit, integration, system, acceptance testing. Black box and white box techniques.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem3/se-testing.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem3/se-testing

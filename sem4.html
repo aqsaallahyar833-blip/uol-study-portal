@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester 4 - UOL Study Portal</title>
+    <style>
+        :root {
+            --primary-green: #0B6B3A;
+            --secondary-green: #1FA463;
+            --dark-green: #08512C;
+            --light-bg: #f9f9f9;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --black: #111111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav ul li {
+            margin: 0 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-left-color: var(--secondary-green);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .subject-header h2 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
+            border-radius: 8px;
+        }
+
+        .topic-item h4 {
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .topic-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover .pdf-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pdf-btn {
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-pdf {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .view-pdf:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .download-pdf {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .download-pdf:hover {
+            background: #388e3c;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="semesters.html">Semesters</a></li>
+            <li><a href="topics.html">Topics</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Semester 4</h1>
+            <p>System Design - OS, DB & Networks</p>
+        </div>
+
+        <div class="subjects-grid">
+            <!-- Operating Systems -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Operating Systems</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Process Management</h4>
+                            <p>Process states, PCB, context switching. Process scheduling: FCFS, SJF, RR, priority
+                                scheduling.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/os-processes.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/os-processes.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Memory Management</h4>
+                            <p>Contiguous allocation, paging, segmentation. Virtual memory, page replacement algorithms:
+                                FIFO, LRU, Optimal.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/os-memory.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/os-memory.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>File Systems</h4>
+                            <p>File concepts, access methods, directory structure. File allocation methods: contiguous,
+                                linked, indexed.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/os-filesystems.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/os-filesystems.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Deadlocks</h4>
+                            <p>Conditions for deadlock, resource allocation graph. Prevention, avoidance (Banker's
+                                algorithm), detection, recovery.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/os-deadlocks.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/os-deadlocks.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Concurrency</h4>
+                            <p>Threads vs processes, multithreading models. Synchronization: semaphores, monitors,
+                                mutex. Classical problems.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/os-concurrency.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/os-concurrency.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Database Systems -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Database Systems</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>ER Model</h4>
+                            <p>Entities, attributes, relationships. ER diagrams, cardinality, participation constraints.
+                                Weak entities.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/db-er-model.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/db-er-model.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Relational Model</h4>
+                            <p>Relations, keys (primary, foreign, candidate). Relational algebra: select, project, join,
+                                union, set operations.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/db-relational.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/db-relational.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>SQL</h4>
+                            <p>DDL, DML, DCL commands. Complex queries, joins, subqueries, views, triggers, stored
+                                procedures.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/db-sql.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem4/db-sql.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Normalization</h4>
+                            <p>Functional dependencies, 1NF, 2NF, 3NF, BCNF. Decomposition and dependency preservation.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/db-normalization.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem4/db-normalization.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Transactions</h4>
+                            <p>ACID properties, serializability. Concurrency control: locking, timestamp ordering,
+                                deadlock handling.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/db-transactions.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/db-transactions.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Computer Networks -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Computer Networks</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>OSI & TCP/IP</h4>
+                            <p>Seven layers of OSI, TCP/IP model comparison. Functions of each layer, protocols at each
+                                layer.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/cn-osi-tcpip.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/cn-osi-tcpip.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Data Link Layer</h4>
+                            <p>Framing, error detection: parity, CRC. Flow control: stop-and-wait, sliding window. MAC
+                                sublayer.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/cn-datalink.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/cn-datalink.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Network Layer</h4>
+                            <p>IP addressing, subnetting, CIDR. Routing algorithms: distance vector, link state. Routers
+                                and gateways.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/cn-network-layer.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem4/cn-network-layer.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Transport Layer</h4>
+                            <p>TCP vs UDP, three-way handshake. Flow control, congestion control, error recovery
+                                mechanisms.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/cn-transport.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/cn-transport.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Application Layer</h4>
+                            <p>DNS, HTTP, FTP, SMTP, POP3. Client-server model, socket programming basics.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/cn-application.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/cn-application.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Software Engineering II -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Software Engineering II</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>UML Diagrams</h4>
+                            <p>Use case, class, sequence, activity, state diagrams. Object-oriented design principles.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/se2-uml.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem4/se2-uml.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Project Management</h4>
+                            <p>Estimation techniques: COCOMO, function points. Risk management, project scheduling using
+                                Gantt charts.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/se2-management.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/se2-management.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Quality Assurance</h4>
+                            <p>SQA activities, reviews, walkthroughs. ISO standards, CMMI levels, six sigma concepts.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/se2-quality.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/se2-quality.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Software Maintenance</h4>
+                            <p>Types of maintenance: corrective, adaptive, perfective, preventive. Reverse engineering,
+                                re-engineering.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/se2-maintenance.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem4/se2-maintenance.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Numerical Computing -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Numerical Computing</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Interpolation</h4>
+                            <p>Lagrange interpolation, Newton's divided difference. Spline interpolation and curve
+                                fitting.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/numerical-interpolation.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem4/numerical-interpolation.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Numerical Integration</h4>
+                            <p>Trapezoidal rule, Simpson's 1/3 and 3/8 rules. Gaussian quadrature introduction.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/numerical-integration.pdf" target="_blank"
+                                    class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem4/numerical-integration.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Solution of Equations</h4>
+                            <p>Bisection method, Newton-Raphson, secant method. Fixed point iteration and convergence
+                                criteria.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/numerical-equations.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem4/numerical-equations.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Linear Systems</h4>
+                            <p>Gauss elimination, LU decomposition. Jacobi and Gauss-Seidel iterative methods.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem4/numerical-linear.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem4/numerical-linear.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="semesters.html" class="back-btn">← Back to Semesters</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester 5 - UOL Study Portal</title>
+    <style>
+        :root {
+            --primary-green: #0B6B3A;
+            --secondary-green: #1FA463;
+            --dark-green: #08512C;
+            --light-bg: #f9f9f9;
+            --text-dark: #333;
+            --white: #FFFFFF;
+            --black: #111111;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        nav {
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            padding: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+        }
+
+        nav ul li {
+            margin: 0 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-left-color: var(--secondary-green);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .subject-header h2 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .subject-content {
+            padding: 20px;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-item:hover {
+            background: #f8f9fa;
+            padding-left: 20px;
+            border-radius: 8px;
+        }
+
+        .topic-item h4 {
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        .topic-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover .pdf-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pdf-btn {
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-pdf {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .view-pdf:hover {
+            background: #1976d2;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .download-pdf {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .download-pdf:hover {
+            background: #388e3c;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 0;
+            }
+
+            nav ul li {
+                margin: 5px 0;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="semesters.html">Semesters</a></li>
+            <li><a href="topics.html">Topics</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Semester 5</h1>
+            <p>Advanced Study - Algorithms & Security</p>
+        </div>
+
+        <div class="subjects-grid">
+            <!-- Algorithm Analysis -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Analysis of Algorithms</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Algorithm Analysis</h4>
+                            <p>Time and space complexity. Asymptotic notations: Big-O, Omega, Theta. Best, average,
+                                worst case analysis.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/algo-analysis.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/algo-analysis.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Sorting Algorithms</h4>
+                            <p>Merge sort, quick sort, heap sort. Lower bound for comparison sorts, counting sort, radix
+                                sort.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/algo-sorting.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/algo-sorting.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Divide & Conquer</h4>
+                            <p>Recurrence relations, master theorem. Binary search, merge sort, Strassen's matrix
+                                multiplication.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/algo-divide-conquer.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem5/algo-divide-conquer.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Dynamic Programming</h4>
+                            <p>Memoization vs tabulation. Knapsack, matrix chain multiplication, LCS, optimal BST.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/algo-dp.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem5/algo-dp.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Greedy Algorithms</h4>
+                            <p>Activity selection, Huffman coding, fractional knapsack. Minimum spanning tree: Prim's
+                                and Kruskal's.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/algo-greedy.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/algo-greedy.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Graph Algorithms</h4>
+                            <p>Shortest path: Bellman-Ford, Floyd-Warshall. Maximum flow: Ford-Fulkerson. Topological
+                                sort.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/algo-graphs.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/algo-graphs.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Web Development -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Web Development</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Backend Development</h4>
+                            <p>Server-side programming with Node.js/PHP/Python. REST API design, middleware, routing.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/web-backend.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/web-backend.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Frontend Frameworks</h4>
+                            <p>React/Vue/Angular basics. Components, state management, props, lifecycle methods.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/web-frontend.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/web-frontend.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Database Integration</h4>
+                            <p>Connecting apps to MySQL/MongoDB. CRUD operations, ORM/ODM concepts. Database security.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/web-database.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/web-database.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Authentication</h4>
+                            <p>JWT, sessions, OAuth. Password hashing, secure login systems, role-based access control.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/web-auth.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/web-auth.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Deployment</h4>
+                            <p>Hosting options, domain setup. CI/CD basics, Docker introduction, cloud deployment.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/web-deployment.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/web-deployment.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Information Security -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Information Security</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Cryptography</h4>
+                            <p>Symmetric vs asymmetric encryption. DES, AES, RSA algorithms. Digital signatures and
+                                certificates.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/sec-crypto.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/sec-crypto.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Authentication</h4>
+                            <p>Password policies, multi-factor authentication. Biometrics, SSO, Kerberos protocol.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/sec-auth.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/sec-auth.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Access Control</h4>
+                            <p>MAC, DAC, RBAC models. Access control lists, capabilities, principle of least privilege.
+                            </p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/sec-access-control.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem5/sec-access-control.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Malware & Threats</h4>
+                            <p>Viruses, worms, trojans, ransomware. Phishing, social engineering, DDoS attacks.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/sec-malware.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/sec-malware.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Network Security</h4>
+                            <p>Firewalls, IDS/IPS, VPN. SSL/TLS, IPSec. Wireless security: WEP, WPA, WPA2.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/sec-network.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/sec-network.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- HCI -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Human Computer Interaction</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>UI Design Principles</h4>
+                            <p>Visibility, feedback, constraints, mapping, consistency. Nielsen's heuristics for UI
+                                design.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/hci-ui.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem5/hci-ui.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>UX Fundamentals</h4>
+                            <p>User research, personas, journey mapping. Wireframing and prototyping techniques.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/hci-ux.pdf" target="_blank" class="pdf-btn view-pdf">👁 View PDF</a>
+                                <a href="pdfs/sem5/hci-ux.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Accessibility</h4>
+                            <p>WCAG guidelines, screen readers, keyboard navigation. Inclusive design principles.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/hci-accessibility.pdf" target="_blank" class="pdf-btn view-pdf">👁
+                                    View PDF</a>
+                                <a href="pdfs/sem5/hci-accessibility.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Evaluation Methods</h4>
+                            <p>Usability testing, A/B testing, cognitive walkthroughs. Eye tracking and user feedback
+                                analysis.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/hci-evaluation.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/hci-evaluation.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Economics -->
+            <div class="subject-card">
+                <div class="subject-header">
+                    <h2>Economics</h2>
+                </div>
+                <div class="subject-content">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <h4>Microeconomics</h4>
+                            <p>Supply and demand, elasticity, consumer theory. Production, costs, market structures.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/econ-micro.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/econ-micro.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Macroeconomics</h4>
+                            <p>GDP, inflation, unemployment. Fiscal and monetary policy, central banking.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/econ-macro.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/econ-macro.pdf" download class="pdf-btn download-pdf">⬇ Download</a>
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <h4>Business Economics</h4>
+                            <p>Profit maximization, market equilibrium. Game theory basics, pricing strategies.</p>
+                            <div class="pdf-actions">
+                                <a href="pdfs/sem5/econ-business.pdf" target="_blank" class="pdf-btn view-pdf">👁 View
+                                    PDF</a>
+                                <a href="pdfs/sem5/econ-business.pdf" download class="pdf-btn download-pdf">⬇
+                                    Download</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="semesters.html" class="back-btn">← Back to Semesters</a>
+        </div>
+    </div>
+</body>
+
+</html>
